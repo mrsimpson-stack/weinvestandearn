@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We Invest And Grow | AI Investment Platform</title>
+    <style>
+        :root {
+            --primary: #00f7ff;
+            --secondary: #0072ff;
+            --dark: #0a192f;
+            --darker: #020c1b;
+            --light: #ccd6f6;
+            --accent: #ff2d75;
+            --success: #00ff9d;
+            --warning: #ffc107;
+            --danger: #ff2d75;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Auth Styles */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .auth-box {
+            background-color: var(--darker);
+            padding: 30px;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.1);
+        }
+        
+        .auth-box h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--light);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(10, 25, 47, 0.5);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+            border-radius: 4px;
+            color: var(--light);
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--darker);
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .switch-auth {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .switch-auth a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .error {
+            color: var(--danger);
+            background-color: rgba(255, 45, 117, 0.1);
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .success {
+            color: var(--success);
+            background-color: rgba(0, 255, 157, 0.1);
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+        }
+        
+        .logo {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logout-btn {
+            background-color: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .welcome-bonus {
+            background-color: rgba(0, 247, 255, 0.1);
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            color: var(--success);
+            text-align: center;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: var(--darker);
+            padding: 15px;
+            border-radius: 4px;
+        }
+        
+        .stat-card h3 {
+            color: var(--light);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .investment-plans {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .plan-card {
+            background-color: var(--darker);
+            padding: 15px;
+            border-radius: 4px;
+        }
+        
+        .plan-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .plan-card .price {
+            color: var(--success);
+            font-weight: bold;
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        
+        .plan-card .daily {
+            color: var(--primary);
+            margin: 5px 0;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .deposit-btn {
+            background: linear-gradient(90deg, var(--success), #00e676);
+            color: var(--darker);
+        }
+        
+        .withdraw-btn {
+            background: linear-gradient(90deg, var(--danger), #ff1a6a);
+            color: white;
+        }
+        
+        .invest-btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--darker);
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .modal-content {
+            background-color: var(--darker);
+            padding: 20px;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .modal-header h3 {
+            color: var(--primary);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .payment-numbers {
+            background-color: rgba(10, 25, 47, 0.5);
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .payment-numbers p {
+            margin: 5px 0;
+        }
+        
+        .payment-numbers .highlight {
+            color: var(--primary);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Container -->
+    <div class="auth-container" id="auth-container">
+        <div class="auth-box" id="login-box">
+            <h2>LOGIN</h2>
+            <div class="error" id="login-error"></div>
+            <div class="form-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" placeholder="Enter your password">
+            </div>
+            <button class="btn" id="login-btn">LOGIN</button>
+            <div class="switch-auth">
+                Don't have an account? <a href="#" id="switch-to-register">Register</a>
+            </div>
+        </div>
+
+        <div class="auth-box" id="register-box" style="display: none;">
+            <h2>REGISTER</h2>
+            <div class="error" id="register-error"></div>
+            <div class="success" id="register-success"></div>
+            <div class="form-group">
+                <label for="register-name">Full Name</label>
+                <input type="text" id="register-name" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+                <label for="register-email">Email</label>
+                <input type="email" id="register-email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="register-phone">Phone Number</label>
+                <input type="tel" id="register-phone" placeholder="Enter your phone number">
+            </div>
+            <div class="form-group">
+                <label for="register-password">Password</label>
+                <input type="password" id="register-password" placeholder="Create a password">
+            </div>
+            <div class="form-group">
+                <label for="register-confirm-password">Confirm Password</label>
+                <input type="password" id="register-confirm-password" placeholder="Confirm your password">
+            </div>
+            <button class="btn" id="register-btn">REGISTER</button>
+            <div class="switch-auth">
+                Already have an account? <a href="#" id="switch-to-login">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard container" id="dashboard">
+        <div class="header">
+            <div class="logo">WE INVEST AND GROW</div>
+            <div class="user-info">
+                <span id="user-name"></span>
+                <button class="logout-btn" id="logout-btn">Logout</button>
+            </div>
+        </div>
+
+        <div class="welcome-bonus" id="welcome-bonus" style="display: none;">
+            Welcome bonus: 2,000 UGX added to your account!
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Account Balance</h3>
+                <p id="account-balance">0 UGX</p>
+            </div>
+            <div class="stat-card">
+                <h3>Today's Earnings</h3>
+                <p id="todays-earnings">0 UGX</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Earnings</h3>
+                <p id="total-earnings">0 UGX</p>
+            </div>
+        </div>
+
+        <h2>INVESTMENT PLANS</h2>
+        <div class="investment-plans">
+            <div class="plan-card">
+                <h3>Starter Plan</h3>
+                <p class="price">10,000 UGX</p>
+                <p class="daily">Earn: 1,500 UGX daily</p>
+                <button class="invest-btn" data-amount="10000">Invest Now</button>
+            </div>
+            <div class="plan-card">
+                <h3>Basic Plan</h3>
+                <p class="price">20,000 UGX</p>
+                <p class="daily">Earn: 2,000 UGX daily</p>
+                <button class="invest-btn" data-amount="20000">Invest Now</button>
+            </div>
+            <div class="plan-card">
+                <h3>Silver Plan</h3>
+                <p class="price">30,000 UGX</p>
+                <p class="daily">Earn: 2,500 UGX daily</p>
+                <button class="invest-btn" data-amount="30000">Invest Now</button>
+            </div>
+            <div class="plan-card">
+                <h3>Gold Plan</h3>
+                <p class="price">50,000 UGX</p>
+                <p class="daily">Earn: 3,500 UGX daily</p>
+                <button class="invest-btn" data-amount="50000">Invest Now</button>
+            </div>
+            <div class="plan-card">
+                <h3>Premium Plan</h3>
+                <p class="price">70,000 UGX</p>
+                <p class="daily">Earn: 4,300 UGX daily</p>
+                <button class="invest-btn" data-amount="70000">Invest Now</button>
+            </div>
+            <div class="plan-card">
+                <h3>Platinum Plan</h3>
+                <p class="price">100,000 UGX</p>
+                <p class="daily">Earn: 5,500 UGX daily</p>
+                <button class="invest-btn" data-amount="100000">Invest Now</button>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="action-btn deposit-btn" id="deposit-btn">Deposit</button>
+            <button class="action-btn withdraw-btn" id="withdraw-btn">Withdraw</button>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div class="modal" id="deposit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Deposit Funds</h3>
+                <button class="close-btn" id="close-deposit-modal">&times;</button>
+            </div>
+            <div class="payment-numbers">
+                <p>Please deposit to:</p>
+                <p>Airtel: <span class="highlight">0749939908</span></p>
+                <p>MTN: <span class="highlight">0764803976</span></p>
+                <p>Name: <span class="highlight">Tumugabirwe Fundesia</span></p>
+            </div>
+            <div class="form-group">
+                <label for="deposit-amount">Amount (UGX)</label>
+                <input type="number" id="deposit-amount" placeholder="Enter amount">
+            </div>
+            <div class="form-group">
+                <label for="payment-number">Your Phone Number</label>
+                <input type="text" id="payment-number" placeholder="Number used to pay">
+            </div>
+            <button class="btn" id="submit-deposit">Submit</button>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal" id="withdraw-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Withdraw Funds</h3>
+                <button class="close-btn" id="close-withdraw-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="withdraw-amount">Amount (UGX)</label>
+                <input type="number" id="withdraw-amount" placeholder="Minimum 5,000 UGX">
+            </div>
+            <div class="form-group">
+                <label for="withdraw-number">Mobile Money Number</label>
+                <input type="text" id="withdraw-number" placeholder="Enter your number">
+            </div>
+            <button class="btn" id="submit-withdraw">Request Withdrawal</button>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const authContainer = document.getElementById('auth-container');
+        const loginBox = document.getElementById('login-box');
+        const registerBox = document.getElementById('register-box');
+        const loginEmail = document.getElementById('login-email');
+        const loginPassword = document.getElementById('login-password');
+        const loginBtn = document.getElementById('login-btn');
+        const loginError = document.getElementById('login-error');
+        const registerName = document.getElementById('register-name');
+        const registerEmail = document.getElementById('register-email');
+        const registerPhone = document.getElementById('register-phone');
+        const registerPassword = document.getElementById('register-password');
+        const registerConfirmPassword = document.getElementById('register-confirm-password');
+        const registerBtn = document.getElementById('register-btn');
+        const registerError = document.getElementById('register-error');
+        const registerSuccess = document.getElementById('register-success');
+        const switchToRegister = document.getElementById('switch-to-register');
+        const switchToLogin = document.getElementById('switch-to-login');
+        const dashboard = document.getElementById('dashboard');
+        const userName = document.getElementById('user-name');
+        const logoutBtn = document.getElementById('logout-btn');
+        const accountBalance = document.getElementById('account-balance');
+        const todaysEarnings = document.getElementById('todays-earnings');
+        const totalEarnings = document.getElementById('total-earnings');
+        const welcomeBonus = document.getElementById('welcome-bonus');
+        const depositBtn = document.getElementById('deposit-btn');
+        const withdrawBtn = document.getElementById('withdraw-btn');
+        const depositModal = document.getElementById('deposit-modal');
+        const withdrawModal = document.getElementById('withdraw-modal');
+        const closeDepositModal = document.getElementById('close-deposit-modal');
+        const closeWithdrawModal = document.getElementById('close-withdraw-modal');
+        const depositAmount = document.getElementById('deposit-amount');
+        const submitDeposit = document.getElementById('submit-deposit');
+        const withdrawAmount = document.getElementById('withdraw-amount');
+        const submitWithdraw = document.getElementById('submit-withdraw');
+
+        // Users database
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        
+        // Check if user is already logged in
+        if (currentUser) {
+            showDashboard();
+            updateDashboard();
+            checkDailyEarnings();
+        }
+
+        // Event Listeners
+        switchToRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginBox.style.display = 'none';
+            registerBox.style.display = 'block';
+            registerError.textContent = '';
+            registerSuccess.textContent = '';
+        });
+
+        switchToLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerBox.style.display = 'none';
+            loginBox.style.display = 'block';
+            loginError.textContent = '';
+        });
+
+        loginBtn.addEventListener('click', login);
+        registerBtn.addEventListener('click', register);
+        logoutBtn.addEventListener('click', logout);
+        depositBtn.addEventListener('click', () => depositModal.style.display = 'flex');
+        withdrawBtn.addEventListener('click', () => withdrawModal.style.display = 'flex');
+        closeDepositModal.addEventListener('click', () => depositModal.style.display = 'none');
+        closeWithdrawModal.addEventListener('click', () => withdrawModal.style.display = 'none');
+        
+        // Handle investment buttons
+        document.querySelectorAll('.invest-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const amount = parseInt(this.getAttribute('data-amount'));
+                invest(amount);
+            });
+        });
+
+        submitDeposit.addEventListener('click', processDeposit);
+        submitWithdraw.addEventListener('click', processWithdrawal);
+
+        // Functions
+        function login() {
+            const email = loginEmail.value.trim();
+            const password = loginPassword.value.trim();
+            
+            if (!email || !password) {
+                loginError.textContent = 'Please fill in all fields';
+                return;
+            }
+            
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (!user) {
+                loginError.textContent = 'Invalid credentials. Please register first.';
+                return;
+            }
+            
+            currentUser = user;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Add welcome bonus if it's the first login
+            if (!currentUser.hasReceivedWelcomeBonus) {
+                currentUser.todaysEarnings += 2000;
+                currentUser.totalEarnings += 2000;
+                currentUser.hasReceivedWelcomeBonus = true;
+                
+                // Update user in database
+                const userIndex = users.findIndex(u => u.email === currentUser.email);
+                if (userIndex !== -1) {
+                    users[userIndex] = currentUser;
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
+                
+                welcomeBonus.style.display = 'block';
+            }
+            
+            showDashboard();
+            updateDashboard();
+            checkDailyEarnings();
+        }
+
+        function register() {
+            const name = registerName.value.trim();
+            const email = registerEmail.value.trim();
+            const phone = registerPhone.value.trim();
+            const password = registerPassword.value.trim();
+            const confirmPassword = registerConfirmPassword.value.trim();
+            
+            if (!name || !email || !phone || !password || !confirmPassword) {
+                registerError.textContent = 'Please fill in all fields';
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                registerError.textContent = 'Passwords do not match';
+                return;
+            }
+            
+            if (users.some(u => u.email === email)) {
+                registerError.textContent = 'Email already registered';
+                return;
+            }
+            
+            const newUser = {
+                name,
+                email,
+                phone,
+                password,
+                accountBalance: 0,
+                todaysEarnings: 0,
+                totalEarnings: 0,
+                investments: [],
+                lastEarningsDate: null,
+                hasReceivedWelcomeBonus: false
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            registerError.textContent = '';
+            registerSuccess.textContent = 'Registration successful! Please login.';
+            
+            // Clear form
+            registerName.value = '';
+            registerEmail.value = '';
+            registerPhone.value = '';
+            registerPassword.value = '';
+            registerConfirmPassword.value = '';
+            
+            // Switch to login
+            registerBox.style.display = 'none';
+            loginBox.style.display = 'block';
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            hideDashboard();
+        }
+
+        function showDashboard() {
+            authContainer.style.display = 'none';
+            dashboard.style.display = 'block';
+        }
+
+        function hideDashboard() {
+            authContainer.style.display = 'flex';
+            dashboard.style.display = 'none';
+            loginBox.style.display = 'block';
+            registerBox.style.display = 'none';
+            loginEmail.value = '';
+            loginPassword.value = '';
+            loginError.textContent = '';
+        }
+
+        function updateDashboard() {
+            if (!currentUser) return;
+            
+            userName.textContent = currentUser.name;
+            accountBalance.textContent = currentUser.accountBalance.toLocaleString() + ' UGX';
+            todaysEarnings.textContent = currentUser.todaysEarnings.toLocaleString() + ' UGX';
+            totalEarnings.textContent = currentUser.totalEarnings.toLocaleString() + ' UGX';
+        }
+
+        function invest(amount) {
+            if (!currentUser) return;
+            
+            if (currentUser.accountBalance < amount) {
+                alert(`Error: You don't have enough balance to invest ${amount.toLocaleString()} UGX`);
+                return;
+            }
+            
+            // Deduct from account balance
+            currentUser.accountBalance -= amount;
+            
+            // Add to investments
+            const investment = {
+                amount,
+                date: new Date().toISOString(),
+                dailyProfit: calculateDailyProfit(amount),
+                daysCompleted: 0
+            };
+            
+            currentUser.investments.push(investment);
+            
+            // Update user in database
+            const userIndex = users.findIndex(u => u.email === currentUser.email);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            alert('Investment successful! You will start earning daily profits.');
+            updateDashboard();
+        }
+
+        function calculateDailyProfit(amount) {
+            if (amount === 10000) return 1500;
+            if (amount === 20000) return 2000;
+            if (amount === 30000) return 2500;
+            if (amount === 50000) return 3500;
+            if (amount === 70000) return 4300;
+            if (amount === 100000) return 5500;
+            return 0;
+        }
+
+        function checkDailyEarnings() {
+            if (!currentUser || !currentUser.investments || currentUser.investments.length === 0) return;
+            
+            const today = new Date().toISOString().split('T')[0];
+            const lastEarningsDate = currentUser.lastEarningsDate || today;
+            
+            if (lastEarningsDate !== today) {
+                let dailyTotal = 0;
+                
+                currentUser.investments.forEach(investment => {
+                    dailyTotal += investment.dailyProfit;
+                    investment.daysCompleted += 1;
+                });
+                
+                currentUser.todaysEarnings += dailyTotal;
+                currentUser.totalEarnings += dailyTotal;
+                currentUser.lastEarningsDate = today;
+                
+                // Update user in database
+                const userIndex = users.findIndex(u => u.email === currentUser.email);
+                if (userIndex !== -1) {
+                    users[userIndex] = currentUser;
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
+                
+                updateDashboard();
+            }
+        }
+
+        function processDeposit() {
+            const amount = parseInt(depositAmount.value.trim());
+            const paymentNumber = document.getElementById('payment-number').value.trim();
+            
+            if (!amount || amount <= 0 || !paymentNumber) {
+                alert('Please fill in all deposit details');
+                return;
+            }
+            
+            // Update user balance
+            currentUser.accountBalance += amount;
+            
+            // Update user in database
+            const userIndex = users.findIndex(u => u.email === currentUser.email);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            // Close modal and update dashboard
+            depositModal.style.display = 'none';
+            updateDashboard();
+            
+            // Redirect to WhatsApp
+            const message = `Deposit Request\nAmount: ${amount} UGX\nPayment Number: ${paymentNumber}`;
+            window.open(`https://wa.me/256749939908?text=${encodeURIComponent(message)}`, '_blank');
+            
+            // Clear form
+            depositAmount.value = '';
+            document.getElementById('payment-number').value = '';
+        }
+
+        function processWithdrawal() {
+            const amount = parseInt(withdrawAmount.value.trim());
+            const mobileNumber = document.getElementById('withdraw-number').value.trim();
+            
+            if (!amount || amount <= 0 || !mobileNumber) {
+                alert('Please fill in all withdrawal details');
+                return;
+            }
+            
+            if (amount < 5000) {
+                alert('Minimum withdrawal amount is 5,000 UGX');
+                return;
+            }
+            
+            if (currentUser.totalEarnings < amount) {
+                alert('You don\'t have enough earnings to withdraw this amount');
+                return;
+            }
+            
+            // Deduct from earnings
+            currentUser.totalEarnings -= amount;
+            if (currentUser.todaysEarnings >= amount) {
+                currentUser.todaysEarnings -= amount;
+            } else {
+                currentUser.todaysEarnings = 0;
+            }
+            
+            // Update user in database
+            const userIndex = users.findIndex(u => u.email === currentUser.email);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            // Close modal and update dashboard
+            withdrawModal.style.display = 'none';
+            updateDashboard();
+            
+            // Redirect to WhatsApp
+            const message = `Withdrawal Request\nAmount: ${amount} UGX\nMobile Number: ${mobileNumber}`;
+            window.open(`https://wa.me/256749939908?text=${encodeURIComponent(message)}`, '_blank');
+            
+            // Clear form
+            withdrawAmount.value = '';
+            document.getElementById('withdraw-number').value = '';
+        }
+    </script>
+</body>
+</html>
